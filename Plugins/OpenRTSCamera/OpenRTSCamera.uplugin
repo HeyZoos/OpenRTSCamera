@@ -1,0 +1,17 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "OpenRTSCamera",
+	"Description": "An open source RTS camera",
+	"Category": "Other",
+	"CreatedBy": "Jesus Bracho",
+	"CreatedByURL": "https://github.com/HeyZoos",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false
+}
