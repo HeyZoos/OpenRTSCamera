@@ -1,17 +1,23 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.9",
 	"FriendlyName": "OpenRTSCamera",
-	"Description": "An open source RTS camera",
+	"Description": "An open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
 	"Category": "Other",
 	"CreatedBy": "Jesus Bracho",
 	"CreatedByURL": "https://github.com/HeyZoos",
-	"DocsURL": "",
+	"DocsURL": "https://github.com/HeyZoos/OpenRTSCamera/wiki",
 	"MarketplaceURL": "",
-	"SupportURL": "",
+	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/issues",
 	"CanContainContent": true,
 	"IsBetaVersion": true,
 	"IsExperimentalVersion": false,
-	"Installed": false
+	"Installed": false,
+	"Plugins": [
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		}
+	]
 }
