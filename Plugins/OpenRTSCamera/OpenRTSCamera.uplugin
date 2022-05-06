@@ -4,7 +4,7 @@
 	"VersionName": "0.9",
 	"FriendlyName": "OpenRTSCamera",
 	"Description": "An open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
-	"Category": "Other",
+	"Category": "Gameplay",
 	"CreatedBy": "Jesus Bracho",
 	"CreatedByURL": "https://github.com/HeyZoos",
 	"DocsURL": "https://github.com/HeyZoos/OpenRTSCamera/wiki",
