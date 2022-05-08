@@ -12,3 +12,4 @@ https://github.com/HeyZoos/OpenRTSCamera/wiki/Getting-Started
 - Follow Target
 - Mouse + Keyboard Controls
 - Gamepad Controls
+- Camera Bounds
