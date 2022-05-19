@@ -58,7 +58,7 @@ void URTSCamera::BeginPlay()
 	this->ConfigureSpringArm();
 	this->TryToFindBoundaryVolumeReference();
 	this->ConditionallyEnableEdgeScrolling();
-	// TODO Add a check to detect if the enhanced input component is being used
+	this->CheckForEnhancedInputComponent();
 	this->BindInputMappingContext();
 	this->BindInputActions();
 }
@@ -219,6 +219,33 @@ void URTSCamera::ConditionallyEnableEdgeScrolling() const
 	}
 }
 
+void URTSCamera::CheckForEnhancedInputComponent() const
+{
+	if (Cast<UEnhancedInputComponent>(this->PlayerController->InputComponent) == nullptr)
+	{
+		UKismetSystemLibrary::PrintString(
+			this->GetWorld(),
+			TEXT("Set Edit > Project Settings > Input > Default Classes to Enhanced Input Classes"), true, true,
+			FLinearColor::Red,
+			100
+		);
+		
+		UKismetSystemLibrary::PrintString(
+			this->GetWorld(),
+			TEXT("Keyboard inputs will probably not function."), true, true,
+			FLinearColor::Red,
+			100
+		);
+		
+		UKismetSystemLibrary::PrintString(
+			this->GetWorld(),
+			TEXT("Error: Enhanced input component not found."), true, true,
+			FLinearColor::Red,
+			100
+		);
+	}
+}
+
 void URTSCamera::BindInputMappingContext() const
 {
 	this->PlayerController->bShowMouseCursor = true;
@@ -300,7 +327,7 @@ void URTSCamera::EdgeScrollLeft() const
 	);
 
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
-	
+
 	this->Root->AddRelativeLocation(
 		-1 * this->SpringArm->GetRightVector() * Movement * this->EdgeScrollSpeed
 	);

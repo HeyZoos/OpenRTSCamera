@@ -133,6 +133,7 @@ private:
 	void ConfigureSpringArm();
 	void TryToFindBoundaryVolumeReference();
 	void ConditionallyEnableEdgeScrolling() const;
+	void CheckForEnhancedInputComponent() const;	
 	void BindInputMappingContext() const;
 	void BindInputActions();
 
