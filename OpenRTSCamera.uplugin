@@ -1,0 +1,30 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.11.0",
+	"FriendlyName": "OpenRTSCamera",
+	"Description": "An Unreal Engine 5 open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
+	"Category": "Gameplay",
+	"CreatedBy": "Jesus Bracho",
+	"CreatedByURL": "https://github.com/HeyZoos",
+	"DocsURL": "https://github.com/HeyZoos/OpenRTSCamera/wiki",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/wiki",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "OpenRTSCamera",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		}
+	]
+}
