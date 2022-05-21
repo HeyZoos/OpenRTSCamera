@@ -334,7 +334,7 @@ void URTSCamera::EdgeScrollLeft() const
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 
 	this->Root->AddRelativeLocation(
-		-1 * this->SpringArm->GetRightVector() * Movement * this->EdgeScrollSpeed
+		-1 * this->Root->GetRightVector() * Movement * this->EdgeScrollSpeed
 	);
 }
 
@@ -350,7 +350,7 @@ void URTSCamera::EdgeScrollRight() const
 
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 	this->Root->AddRelativeLocation(
-		this->SpringArm->GetRightVector() * Movement * this->EdgeScrollSpeed
+		this->Root->GetRightVector() * Movement * this->EdgeScrollSpeed
 	);
 }
 
@@ -366,7 +366,7 @@ void URTSCamera::EdgeScrollUp() const
 
 	const auto Movement = 1 - UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 	this->Root->AddRelativeLocation(
-		this->SpringArm->GetForwardVector() * Movement * this->EdgeScrollSpeed
+		this->Root->GetForwardVector() * Movement * this->EdgeScrollSpeed
 	);
 }
 
@@ -382,7 +382,7 @@ void URTSCamera::EdgeScrollDown() const
 
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 	this->Root->AddRelativeLocation(
-		-1 * this->SpringArm->GetForwardVector() * Movement * this->EdgeScrollSpeed
+		-1 * this->Root->GetForwardVector() * Movement * this->EdgeScrollSpeed
 	);
 }
 
