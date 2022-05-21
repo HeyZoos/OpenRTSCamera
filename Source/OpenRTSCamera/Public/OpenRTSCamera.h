@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2022 Jesus Bracho All Rights Reserved.
 
 #pragma once
 
