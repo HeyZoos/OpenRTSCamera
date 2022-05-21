@@ -2,12 +2,15 @@
 
 #include "RTSCamera.h"
 
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Engine/LocalPlayer.h"
+#include "Engine/World.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "VectorTypes.h"
-#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "VectorTypes.h"
 
 URTSCamera::URTSCamera()
 {
@@ -231,14 +234,14 @@ void URTSCamera::CheckForEnhancedInputComponent() const
 			FLinearColor::Red,
 			100
 		);
-		
+
 		UKismetSystemLibrary::PrintString(
 			this->GetWorld(),
 			TEXT("Keyboard inputs will probably not function."), true, true,
 			FLinearColor::Red,
 			100
 		);
-		
+
 		UKismetSystemLibrary::PrintString(
 			this->GetWorld(),
 			TEXT("Error: Enhanced input component not found."), true, true,

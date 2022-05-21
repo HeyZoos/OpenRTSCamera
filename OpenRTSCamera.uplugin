@@ -15,13 +15,12 @@
 	"IsExperimentalVersion": false,
 	"EngineVersion": "5.0.1",
 	"Installed": false,
-	"WhitelistPlatforms": ["Win64"],
-	"BlacklistPlatforms": ["Android", "IOS", "Linux", "LinuxArm64"],
 	"Modules": [
 		{
 			"Name": "OpenRTSCamera",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": ["Win64"]
 		}
 	],
 	"Plugins": [
