@@ -3,11 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CameraBoundsVolume.h"
 #include "InputMappingContext.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ActorComponent.h"
-#include "Engine/BlockingVolume.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "RTSCamera.generated.h"
 
@@ -56,7 +54,7 @@ public:
 	bool EnableCameraLag;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	bool EnableCameraRotationLag;
-	
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Dynamic Camera Height Settings")
 	bool EnableDynamicCameraHeight;
 	UPROPERTY(
@@ -122,7 +120,7 @@ protected:
 	UPROPERTY()
 	APlayerController* PlayerController;
 	UPROPERTY()
-	ACameraBoundsVolume* BoundaryVolume;
+	AActor* BoundaryVolume;
 
 	float DesiredZoomLength;
 
@@ -131,7 +129,7 @@ private:
 	void ConfigureSpringArm();
 	void TryToFindBoundaryVolumeReference();
 	void ConditionallyEnableEdgeScrolling() const;
-	void CheckForEnhancedInputComponent() const;	
+	void CheckForEnhancedInputComponent() const;
 	void BindInputMappingContext() const;
 	void BindInputActions();
 

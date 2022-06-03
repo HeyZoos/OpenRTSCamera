@@ -204,14 +204,14 @@ void URTSCamera::TryToFindBoundaryVolumeReference()
 	TArray<AActor*> BlockingVolumes;
 	UGameplayStatics::GetAllActorsOfClassWithTag(
 		this->GetWorld(),
-		ACameraBoundsVolume::StaticClass(),
+		AActor::StaticClass(),
 		this->CameraBlockingVolumeTag,
 		BlockingVolumes
 	);
 
 	if (BlockingVolumes.Num() > 0)
 	{
-		this->BoundaryVolume = Cast<ACameraBoundsVolume>(BlockingVolumes[0]);
+		this->BoundaryVolume = BlockingVolumes[0];
 	}
 }
 
