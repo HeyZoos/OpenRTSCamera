@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "0.11.2",
+	"VersionName": "0.12.0",
 	"FriendlyName": "OpenRTSCamera",
 	"Description": "An Unreal Engine 5 open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
 	"Category": "Gameplay",
@@ -13,7 +13,7 @@
 	"CanContainContent": true,
 	"IsBetaVersion": true,
 	"IsExperimentalVersion": false,
-	"EngineVersion": "5.0.1",
+	"EngineVersion": "5.0.0",
 	"Installed": false,
 	"Modules": [
 		{

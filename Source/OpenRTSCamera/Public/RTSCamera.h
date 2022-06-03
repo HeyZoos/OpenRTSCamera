@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CameraBoundsVolume.h"
 #include "InputMappingContext.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ActorComponent.h"
@@ -30,9 +31,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RTSCamera")
 	void UnFollowTarget();
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
-	FName CameraBlockingVolumeTag;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Zoom Settings")
 	float MinimumZoomLength;
@@ -124,7 +122,7 @@ protected:
 	UPROPERTY()
 	APlayerController* PlayerController;
 	UPROPERTY()
-	ABlockingVolume* BoundaryVolume;
+	ACameraBoundsVolume* BoundaryVolume;
 
 	float DesiredZoomLength;
 
@@ -149,7 +147,9 @@ private:
 	void ConditionallyApplyCameraBounds() const;
 
 	UPROPERTY()
-	float DeltaSeconds;
+	FName CameraBlockingVolumeTag;
 	UPROPERTY()
 	AActor* CameraFollowTarget;
+	UPROPERTY()
+	float DeltaSeconds;
 };
