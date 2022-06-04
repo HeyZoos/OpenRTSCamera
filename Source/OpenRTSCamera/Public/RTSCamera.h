@@ -6,7 +6,6 @@
 #include "InputMappingContext.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ActorComponent.h"
-#include "Engine/BlockingVolume.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "RTSCamera.generated.h"
 
@@ -30,9 +29,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RTSCamera")
 	void UnFollowTarget();
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
-	FName CameraBlockingVolumeTag;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Zoom Settings")
 	float MinimumZoomLength;
@@ -58,7 +54,7 @@ public:
 	bool EnableCameraLag;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	bool EnableCameraRotationLag;
-	
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Dynamic Camera Height Settings")
 	bool EnableDynamicCameraHeight;
 	UPROPERTY(
@@ -124,7 +120,7 @@ protected:
 	UPROPERTY()
 	APlayerController* PlayerController;
 	UPROPERTY()
-	ABlockingVolume* BoundaryVolume;
+	AActor* BoundaryVolume;
 
 	float DesiredZoomLength;
 
@@ -133,7 +129,7 @@ private:
 	void ConfigureSpringArm();
 	void TryToFindBoundaryVolumeReference();
 	void ConditionallyEnableEdgeScrolling() const;
-	void CheckForEnhancedInputComponent() const;	
+	void CheckForEnhancedInputComponent() const;
 	void BindInputMappingContext() const;
 	void BindInputActions();
 
@@ -149,7 +145,9 @@ private:
 	void ConditionallyApplyCameraBounds() const;
 
 	UPROPERTY()
-	float DeltaSeconds;
+	FName CameraBlockingVolumeTag;
 	UPROPERTY()
 	AActor* CameraFollowTarget;
+	UPROPERTY()
+	float DeltaSeconds;
 };

@@ -15,7 +15,7 @@
 URTSCamera::URTSCamera()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	this->CameraBlockingVolumeTag = "@CameraBounds";
+	this->CameraBlockingVolumeTag = FName("OpenRTSCamera#CameraBounds");
 	this->EdgeScrollSpeed = 50;
 	this->DistanceFromEdgeThreshold = 0.1f;
 	this->EnableCameraLag = true;
@@ -80,6 +80,7 @@ void URTSCamera::TickComponent(
 	this->ConditionallyKeepCameraAtDesiredZoomAboveGround();
 	this->SmoothTargetArmLengthToDesiredZoom();
 	this->FollowTargetIfSet();
+	this->ConditionallyApplyCameraBounds();
 }
 
 void URTSCamera::FollowTarget(AActor* Target)
@@ -203,14 +204,14 @@ void URTSCamera::TryToFindBoundaryVolumeReference()
 	TArray<AActor*> BlockingVolumes;
 	UGameplayStatics::GetAllActorsOfClassWithTag(
 		this->GetWorld(),
-		ABlockingVolume::StaticClass(),
+		AActor::StaticClass(),
 		this->CameraBlockingVolumeTag,
 		BlockingVolumes
 	);
 
 	if (BlockingVolumes.Num() > 0)
 	{
-		this->BoundaryVolume = Cast<ABlockingVolume>(BlockingVolumes[0]);
+		this->BoundaryVolume = BlockingVolumes[0];
 	}
 }
 
