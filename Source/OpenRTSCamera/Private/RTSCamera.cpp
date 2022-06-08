@@ -16,6 +16,7 @@ URTSCamera::URTSCamera()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	this->CameraBlockingVolumeTag = FName("OpenRTSCamera#CameraBounds");
+	this->CollisionChannel = ECC_WorldStatic;
 	this->EdgeScrollSpeed = 50;
 	this->DistanceFromEdgeThreshold = 0.1f;
 	this->EnableCameraLag = true;
@@ -405,7 +406,7 @@ void URTSCamera::SmoothTargetArmLengthToDesiredZoom() const
 	);
 }
 
-void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround() const
+void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 {
 	if (this->EnableDynamicCameraHeight)
 	{
@@ -416,7 +417,7 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround() const
 			this->GetWorld(),
 			FVector(RootWorldLocation.X, RootWorldLocation.Y, RootWorldLocation.Z + this->FindGroundTraceLength),
 			FVector(RootWorldLocation.X, RootWorldLocation.Y, RootWorldLocation.Z - this->FindGroundTraceLength),
-			TraceTypeQuery1,
+			UEngineTypes::ConvertToTraceType(this->CollisionChannel),
 			true,
 			ActorsToIgnore,
 			EDrawDebugTrace::Type::None,
@@ -433,11 +434,35 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround() const
 			);
 		}
 
-		else
+		else if (!this->IsCameraOutOfBoundsErrorAlreadyDisplayed)
 		{
+			this->IsCameraOutOfBoundsErrorAlreadyDisplayed = true;
+			
 			UKismetSystemLibrary::PrintString(
 				this->GetWorld(),
-				"Error: AC_RTSCamera needs to be placed on the ground! Increase trace length or change the starting position of the parent actor for the spring arm"
+				"Or add a `RTSCameraBoundsVolume` actor to the scene.",
+				true,
+				true,
+				FLinearColor::Red,
+				100
+			);
+			
+			UKismetSystemLibrary::PrintString(
+				this->GetWorld(),
+				"Increase trace length or change the starting position of the parent actor for the spring arm.",
+				true,
+				true,
+				FLinearColor::Red,
+				100
+			);
+			
+			UKismetSystemLibrary::PrintString(
+				this->GetWorld(),
+				"Error: AC_RTSCamera needs to be placed on the ground!",
+				true,
+				true,
+				FLinearColor::Red,
+				100
 			);
 		}
 	}

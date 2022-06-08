@@ -57,6 +57,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Dynamic Camera Height Settings")
 	bool EnableDynamicCameraHeight;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Dynamic Camera Height Settings")
+	TEnumAsByte<ECollisionChannel> CollisionChannel;
 	UPROPERTY(
 		BlueprintReadWrite,
 		EditAnywhere,
@@ -121,7 +123,7 @@ protected:
 	APlayerController* PlayerController;
 	UPROPERTY()
 	AActor* BoundaryVolume;
-
+	UPROPERTY()
 	float DesiredZoomLength;
 
 private:
@@ -141,7 +143,7 @@ private:
 
 	void FollowTargetIfSet() const;
 	void SmoothTargetArmLengthToDesiredZoom() const;
-	void ConditionallyKeepCameraAtDesiredZoomAboveGround() const;
+	void ConditionallyKeepCameraAtDesiredZoomAboveGround();
 	void ConditionallyApplyCameraBounds() const;
 
 	UPROPERTY()
@@ -150,4 +152,6 @@ private:
 	AActor* CameraFollowTarget;
 	UPROPERTY()
 	float DeltaSeconds;
+	UPROPERTY()
+	bool IsCameraOutOfBoundsErrorAlreadyDisplayed;
 };
