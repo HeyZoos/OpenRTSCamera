@@ -6,13 +6,10 @@
 #include "GameFramework/CameraBlockingVolume.h"
 #include "RTSCameraBoundsVolume.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class OPENRTSCAMERA_API ARTSCameraBoundsVolume : public ACameraBlockingVolume
+class OPENRTSCAMERARUNTIME_API ARTSCameraBoundsVolume : public ACameraBlockingVolume
 {
 	GENERATED_BODY()
-	
+
 	ARTSCameraBoundsVolume();
 };

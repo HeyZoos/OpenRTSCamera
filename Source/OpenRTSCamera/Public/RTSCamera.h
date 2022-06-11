@@ -9,9 +9,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "RTSCamera.generated.h"
 
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class OPENRTSCAMERA_API URTSCamera : public UActorComponent
+class OPENRTSCAMERARUNTIME_API URTSCamera : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -48,7 +47,6 @@ public:
 	float MoveSpeed;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	float RotateSpeed;
-
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	bool EnableCameraLag;

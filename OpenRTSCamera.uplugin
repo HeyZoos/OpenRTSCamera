@@ -17,7 +17,7 @@
 	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/94e9872ad3754e798b6ec53f4494f5de",
 	"Modules": [
 		{
-			"Name": "OpenRTSCamera",
+			"Name": "OpenRTSCameraRuntime",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"PlatformAllowList": [
