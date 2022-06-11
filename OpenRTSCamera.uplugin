@@ -1,18 +1,20 @@
 {
-	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "0.14.0",
-	"FriendlyName": "OpenRTSCamera",
-	"Description": "An Unreal Engine 5 open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
-	"Category": "Gameplay",
+	"BuiltInInitialFeatureState": "Registered",
+	"CanContainContent": true,
+	"Category": "Game Features",
 	"CreatedBy": "Jesus Bracho",
 	"CreatedByURL": "https://github.com/HeyZoos",
+	"Description": "An Unreal Engine 5 open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
 	"DocsURL": "https://github.com/HeyZoos/OpenRTSCamera/wiki",
-	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/94e9872ad3754e798b6ec53f4494f5de",
-	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/issues",
-	"CanContainContent": true,
+	"EnabledByDefault": false,
 	"EngineVersion": "5.0.0",
+	"ExplicitlyLoaded": true,
+	"FileVersion": 3,
+	"FriendlyName": "OpenRTSCamera",
 	"Installed": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/94e9872ad3754e798b6ec53f4494f5de",
 	"Modules": [
 		{
 			"Name": "OpenRTSCamera",
@@ -27,8 +29,17 @@
 		{
 			"Name": "EnhancedInput",
 			"Enabled": true
+		},
+		{
+			"Name": "GameFeatures",
+			"Enabled": true
+		},
+		{
+			"Name": "ModularGameplay",
+			"Enabled": true
 		}
 	],
-	"IsBetaVersion": false,
-	"IsExperimentalVersion": false
+	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/issues",
+	"Version": 1,
+	"VersionName": "0.14.0"
 }

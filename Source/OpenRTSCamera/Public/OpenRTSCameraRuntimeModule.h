@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FOpenRTSCameraModule : public IModuleInterface
+class FOpenRTSCameraRuntimeModule : public IModuleInterface
 {
 public:
 
