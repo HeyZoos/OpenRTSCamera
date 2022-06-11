@@ -13,4 +13,6 @@ class OPENRTSCAMERARUNTIME_API UOpenRTSCameraInit : public UActorComponent
 
 public:
 	UOpenRTSCameraInit();
+
+	virtual void BeginPlay() override;
 };

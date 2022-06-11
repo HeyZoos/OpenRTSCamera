@@ -2,7 +2,19 @@
 
 #include "OpenRTSCameraInit.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 UOpenRTSCameraInit::UOpenRTSCameraInit()
 {
 	
+}
+
+void UOpenRTSCameraInit::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UKismetSystemLibrary::PrintString(
+		this->GetWorld(),
+		"UOpenRTSCameraInit::BeginPlay()"
+	);
 }
