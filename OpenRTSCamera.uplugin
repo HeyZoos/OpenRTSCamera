@@ -1,5 +1,5 @@
 {
-	"BuiltInInitialFeatureState": "Registered",
+	"BuiltInInitialFeatureState": "Active",
 	"CanContainContent": true,
 	"Category": "Game Features",
 	"CreatedBy": "Jesus Bracho",
@@ -41,5 +41,5 @@
 	],
 	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/issues",
 	"Version": 1,
-	"VersionName": "0.14.0"
+	"VersionName": "0.15.0"
 }

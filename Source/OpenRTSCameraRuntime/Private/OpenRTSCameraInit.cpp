@@ -17,4 +17,6 @@ void UOpenRTSCameraInit::BeginPlay()
 		this->GetWorld(),
 		"UOpenRTSCameraInit::BeginPlay()"
 	);
+
+	
 }
