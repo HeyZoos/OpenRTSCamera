@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class OpenRTSCamera : ModuleRules
+public class OpenRTSCameraRuntime : ModuleRules
 {
-	public OpenRTSCamera(ReadOnlyTargetRules Target) : base(Target)
+	public OpenRTSCameraRuntime(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 

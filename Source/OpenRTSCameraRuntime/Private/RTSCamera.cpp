@@ -67,6 +67,7 @@ void URTSCamera::BeginPlay()
 	this->CheckForEnhancedInputComponent();
 	this->BindInputMappingContext();
 	this->BindInputActions();
+	this->SetActiveCamera();
 }
 
 void URTSCamera::TickComponent(
@@ -310,6 +311,11 @@ void URTSCamera::BindInputActions()
 			&URTSCamera::OnMoveCameraYAxis
 		);
 	}
+}
+
+void URTSCamera::SetActiveCamera() const
+{
+	UGameplayStatics::GetPlayerController(this->GetWorld(), 0)->SetViewTarget(this->GetOwner());
 }
 
 void URTSCamera::ConditionallyPerformEdgeScrolling() const

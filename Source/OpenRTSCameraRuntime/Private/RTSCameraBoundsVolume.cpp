@@ -1,8 +1,7 @@
 // Copyright 2022, Jesus Bracho, All Rights Reserved.
 
-
 #include "RTSCameraBoundsVolume.h"
-
+#include "Components/PrimitiveComponent.h"
 
 ARTSCameraBoundsVolume::ARTSCameraBoundsVolume()
 {
