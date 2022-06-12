@@ -9,7 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "RTSCamera.generated.h"
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERARUNTIME_API URTSCamera : public UActorComponent
 {
 	GENERATED_BODY()
@@ -132,6 +132,7 @@ private:
 	void CheckForEnhancedInputComponent() const;
 	void BindInputMappingContext() const;
 	void BindInputActions();
+	void SetActiveCamera() const;
 
 	void ConditionallyPerformEdgeScrolling() const;
 	void EdgeScrollLeft() const;
