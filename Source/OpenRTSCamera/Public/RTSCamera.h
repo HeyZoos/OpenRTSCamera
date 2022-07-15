@@ -39,9 +39,9 @@ public:
 	float ZoomSpeed;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
-	double StartingYAngle;
+	float StartingYAngle;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
-	double StartingZAngle;
+	float StartingZAngle;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	float MoveSpeed;

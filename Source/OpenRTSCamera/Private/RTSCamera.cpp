@@ -10,7 +10,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "VectorTypes.h"
 
 URTSCamera::URTSCamera()
 {
@@ -465,7 +464,8 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 		const auto RootWorldLocation = this->Root->GetComponentLocation();
 		const TArray<AActor*> ActorsToIgnore;
 
-		if (FHitResult HitResult; UKismetSystemLibrary::LineTraceSingle(
+		auto HitResult = FHitResult();
+		auto DidHit = UKismetSystemLibrary::LineTraceSingle(
 			this->GetWorld(),
 			FVector(RootWorldLocation.X, RootWorldLocation.Y, RootWorldLocation.Z + this->FindGroundTraceLength),
 			FVector(RootWorldLocation.X, RootWorldLocation.Y, RootWorldLocation.Z - this->FindGroundTraceLength),
@@ -475,7 +475,9 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 			EDrawDebugTrace::Type::None,
 			HitResult,
 			true
-		))
+		);
+
+		if (DidHit)
 		{
 			this->Root->SetWorldLocation(
 				FVector(

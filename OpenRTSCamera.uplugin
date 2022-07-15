@@ -18,9 +18,7 @@
 			"Name": "OpenRTSCamera",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"PlatformAllowList": [
-				"Win64"
-			]
+			"WhitelistPlatforms": ["Win64"]
 		}
 	],
 	"Plugins": [
