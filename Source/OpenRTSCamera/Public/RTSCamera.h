@@ -10,7 +10,7 @@
 #include "RTSCamera.generated.h"
 
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class OPENRTSCAMERARUNTIME_API URTSCamera : public UActorComponent
+class OPENRTSCAMERA_API URTSCamera : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -39,14 +39,29 @@ public:
 	float ZoomSpeed;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
-	double StartingYAngle;
+	float StartingYAngle;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
-	double StartingZAngle;
+	float StartingZAngle;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	float MoveSpeed;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	float RotateSpeed;
+	
+	/**
+	 * Controls how fast the drag will move the camera.
+	 * Higher values will make the camera move more slowly.
+	 * The drag speed is calculated as follows:
+	 *	DragSpeed = MousePositionDelta / (ViewportExtents * DragExtent)
+	 * If the drag extent is small, the drag speed will hit the "max speed" of `this->MoveSpeed` more quickly.
+	 */
+	UPROPERTY(
+		BlueprintReadWrite,
+		EditAnywhere,
+		Category = "RTSCamera",
+		meta = (ClampMin = "0.0", ClampMax = "1.0")
+	)
+	float DragExtent;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera")
 	bool EnableCameraLag;
@@ -95,6 +110,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Inputs")
 	UInputAction* MoveCameraXAxis;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Inputs")
+	UInputAction* DragCamera;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Inputs")
 	UInputAction* ZoomCamera;
 
 protected:
@@ -106,6 +123,7 @@ protected:
 	void OnTurnCameraRight(const FInputActionValue& Value);
 	void OnMoveCameraYAxis(const FInputActionValue& Value);
 	void OnMoveCameraXAxis(const FInputActionValue& Value);
+	void OnDragCamera(const FInputActionValue& Value);
 
 	void MoveSpringArmWithMoveSpeed(float X, float Y, float Scale) const;
 
@@ -153,4 +171,8 @@ private:
 	float DeltaSeconds;
 	UPROPERTY()
 	bool IsCameraOutOfBoundsErrorAlreadyDisplayed;
+	UPROPERTY()
+	bool IsDragging;
+	UPROPERTY()
+	FVector2D DragStartLocation;
 };

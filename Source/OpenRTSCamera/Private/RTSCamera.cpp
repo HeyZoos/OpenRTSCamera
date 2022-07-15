@@ -10,13 +10,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "VectorTypes.h"
 
 URTSCamera::URTSCamera()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	this->CameraBlockingVolumeTag = FName("OpenRTSCamera#CameraBounds");
 	this->CollisionChannel = ECC_WorldStatic;
+	this->DragExtent = 0.6f;
 	this->EdgeScrollSpeed = 50;
 	this->DistanceFromEdgeThreshold = 0.1f;
 	this->EnableCameraLag = true;
@@ -164,6 +164,43 @@ void URTSCamera::OnMoveCameraXAxis(const FInputActionValue& Value)
 	);
 }
 
+void URTSCamera::OnDragCamera(const FInputActionValue& Value)
+{
+	if (!this->IsDragging && Value.Get<bool>())
+	{
+		this->IsDragging = true;
+		this->DragStartLocation = UWidgetLayoutLibrary::GetMousePositionOnViewport(this->GetWorld());
+	}
+	
+	else if (this->IsDragging && Value.Get<bool>())
+	{
+		const auto MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(this->GetWorld());
+		auto DragExtents = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this->GetWorld()).GetLocalSize();
+		DragExtents *= DragExtent;
+		
+		auto Delta = MousePosition - this->DragStartLocation;
+		Delta.X = FMath::Clamp(Delta.X, -DragExtents.X, DragExtents.X) / DragExtents.X;
+		Delta.Y = FMath::Clamp(Delta.Y, -DragExtents.Y, DragExtents.Y) / DragExtents.Y;
+		
+		this->MoveSpringArmWithMoveSpeed(
+			this->SpringArm->GetRightVector().X,
+			this->SpringArm->GetRightVector().Y,
+			Delta.X
+		);
+		
+		this->MoveSpringArmWithMoveSpeed(
+			this->SpringArm->GetForwardVector().X,
+			this->SpringArm->GetForwardVector().Y,
+			Delta.Y * -1
+		);
+	}
+
+	else if (this->IsDragging && !Value.Get<bool>())
+	{
+		this->IsDragging = false;
+	}
+}
+
 void URTSCamera::MoveSpringArmWithMoveSpeed(const float X, const float Y, const float Scale) const
 {
 	auto Movement = FVector2D(X, Y);
@@ -223,6 +260,7 @@ void URTSCamera::ConditionallyEnableEdgeScrolling() const
 	{
 		FInputModeGameAndUI InputMode;
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+		InputMode.SetHideCursorDuringCapture(false);
 		this->PlayerController->SetInputMode(InputMode);
 	}
 }
@@ -310,6 +348,13 @@ void URTSCamera::BindInputActions()
 			this,
 			&URTSCamera::OnMoveCameraYAxis
 		);
+		
+		EnhancedInputComponent->BindAction(
+			this->DragCamera,
+			ETriggerEvent::Triggered,
+			this,
+			&URTSCamera::OnDragCamera
+		);
 	}
 }
 
@@ -320,7 +365,7 @@ void URTSCamera::SetActiveCamera() const
 
 void URTSCamera::ConditionallyPerformEdgeScrolling() const
 {
-	if (this->EnableEdgeScrolling)
+	if (this->EnableEdgeScrolling && !this->IsDragging)
 	{
 		this->EdgeScrollLeft();
 		this->EdgeScrollRight();
@@ -419,7 +464,8 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 		const auto RootWorldLocation = this->Root->GetComponentLocation();
 		const TArray<AActor*> ActorsToIgnore;
 
-		if (FHitResult HitResult; UKismetSystemLibrary::LineTraceSingle(
+		auto HitResult = FHitResult();
+		auto DidHit = UKismetSystemLibrary::LineTraceSingle(
 			this->GetWorld(),
 			FVector(RootWorldLocation.X, RootWorldLocation.Y, RootWorldLocation.Z + this->FindGroundTraceLength),
 			FVector(RootWorldLocation.X, RootWorldLocation.Y, RootWorldLocation.Z - this->FindGroundTraceLength),
@@ -429,7 +475,9 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 			EDrawDebugTrace::Type::None,
 			HitResult,
 			true
-		))
+		);
+
+		if (DidHit)
 		{
 			this->Root->SetWorldLocation(
 				FVector(
