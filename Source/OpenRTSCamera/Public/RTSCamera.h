@@ -10,7 +10,7 @@
 #include "RTSCamera.generated.h"
 
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class OPENRTSCAMERARUNTIME_API URTSCamera : public UActorComponent
+class OPENRTSCAMERA_API URTSCamera : public UActorComponent
 {
 	GENERATED_BODY()
 

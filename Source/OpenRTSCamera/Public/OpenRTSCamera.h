@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FOpenRTSCameraRuntimeModule : public IModuleInterface
+class FOpenRTSCameraModule : public IModuleInterface
 {
 public:
 	virtual void StartupModule() override;
