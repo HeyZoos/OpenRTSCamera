@@ -15,7 +15,7 @@
 
 # Changelog
 
-## 0.17.0
+### 0.17.0
 
-- Fix [#27](https://github.com/HeyZoos/OpenRTSCamera/issues/27) by tieing camera movement to delta time (thanks [@theMyll](https://github.com/theMyll))
+- Fix [#27](https://github.com/HeyZoos/OpenRTSCamera/issues/27) by tying camera movement to delta time (thanks [@theMyll](https://github.com/theMyll))
 - **This will result in slower movement across the board, if you notice your camera moving more slowly, up the speed values by about 100x. For example, the new camera blueprint speed defaults are 5000**
