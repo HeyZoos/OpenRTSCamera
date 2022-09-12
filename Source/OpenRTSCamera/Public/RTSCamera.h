@@ -9,6 +9,22 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "RTSCamera.generated.h"
 
+/**
+ * We use these commands so that move camera inputs can be tied to the tick rate of the game.
+ * https://github.com/HeyZoos/OpenRTSCamera/issues/27
+ */
+USTRUCT()
+struct FMoveCameraCommand
+{
+	GENERATED_BODY()
+	UPROPERTY()
+	float X;
+	UPROPERTY()
+	float Y;
+	UPROPERTY()
+	float Scale;
+};
+
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERA_API URTSCamera : public UActorComponent
 {
@@ -125,7 +141,8 @@ protected:
 	void OnMoveCameraXAxis(const FInputActionValue& Value);
 	void OnDragCamera(const FInputActionValue& Value);
 
-	void MoveSpringArmWithMoveSpeed(float X, float Y, float Scale) const;
+	void RequestMoveCamera(float X, float Y, float Scale);
+	void ApplyMoveCameraCommands();
 
 	UPROPERTY()
 	AActor* Owner;
@@ -175,4 +192,6 @@ private:
 	bool IsDragging;
 	UPROPERTY()
 	FVector2D DragStartLocation;
+	UPROPERTY()
+	TArray<FMoveCameraCommand> MoveCameraCommands;
 };

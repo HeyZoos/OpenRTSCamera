@@ -18,7 +18,9 @@
 			"Name": "OpenRTSCamera",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"WhitelistPlatforms": ["Win64"]
+			"PlatformAllowList": [
+				"Win64"
+			]
 		}
 	],
 	"Plugins": [
@@ -29,5 +31,5 @@
 	],
 	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/issues",
 	"Version": 1,
-	"VersionName": "0.16.0"
+	"VersionName": "0.17.0"
 }
