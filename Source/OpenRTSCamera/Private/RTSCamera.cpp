@@ -78,6 +78,7 @@ void URTSCamera::TickComponent(
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	this->DeltaSeconds = DeltaTime;
+	this->ApplyMoveCameraCommands();
 	this->ConditionallyPerformEdgeScrolling();
 	this->ConditionallyKeepCameraAtDesiredZoomAboveGround();
 	this->SmoothTargetArmLengthToDesiredZoom();
@@ -148,7 +149,7 @@ void URTSCamera::OnTurnCameraRight(const FInputActionValue&)
 
 void URTSCamera::OnMoveCameraYAxis(const FInputActionValue& Value)
 {
-	this->MoveSpringArmWithMoveSpeed(
+	this->RequestMoveCamera(
 		this->SpringArm->GetForwardVector().X,
 		this->SpringArm->GetForwardVector().Y,
 		Value.Get<float>()
@@ -157,7 +158,7 @@ void URTSCamera::OnMoveCameraYAxis(const FInputActionValue& Value)
 
 void URTSCamera::OnMoveCameraXAxis(const FInputActionValue& Value)
 {
-	this->MoveSpringArmWithMoveSpeed(
+	this->RequestMoveCamera(
 		this->SpringArm->GetRightVector().X,
 		this->SpringArm->GetRightVector().Y,
 		Value.Get<float>()
@@ -182,13 +183,13 @@ void URTSCamera::OnDragCamera(const FInputActionValue& Value)
 		Delta.X = FMath::Clamp(Delta.X, -DragExtents.X, DragExtents.X) / DragExtents.X;
 		Delta.Y = FMath::Clamp(Delta.Y, -DragExtents.Y, DragExtents.Y) / DragExtents.Y;
 		
-		this->MoveSpringArmWithMoveSpeed(
+		this->RequestMoveCamera(
 			this->SpringArm->GetRightVector().X,
 			this->SpringArm->GetRightVector().Y,
 			Delta.X
 		);
 		
-		this->MoveSpringArmWithMoveSpeed(
+		this->RequestMoveCamera(
 			this->SpringArm->GetForwardVector().X,
 			this->SpringArm->GetForwardVector().Y,
 			Delta.Y * -1
@@ -201,14 +202,28 @@ void URTSCamera::OnDragCamera(const FInputActionValue& Value)
 	}
 }
 
-void URTSCamera::MoveSpringArmWithMoveSpeed(const float X, const float Y, const float Scale) const
+void URTSCamera::RequestMoveCamera(const float X, const float Y, const float Scale)
 {
-	auto Movement = FVector2D(X, Y);
-	Movement.Normalize();
-	Movement *= this->MoveSpeed * Scale;
-	this->Root->SetWorldLocation(
-		this->Root->GetComponentLocation() + FVector(Movement.X, Movement.Y, 0.0f)
-	);
+	FMoveCameraCommand MoveCameraCommand;
+	MoveCameraCommand.X = X;
+	MoveCameraCommand.Y = Y;
+	MoveCameraCommand.Scale = Scale;
+	MoveCameraCommands.Push(MoveCameraCommand);
+}
+
+void URTSCamera::ApplyMoveCameraCommands()
+{
+	for (const auto& [X, Y, Scale] : this->MoveCameraCommands)
+	{
+		auto Movement = FVector2D(X, Y);
+		Movement.Normalize();
+		Movement *= this->MoveSpeed * Scale * this->DeltaSeconds;
+		this->Root->SetWorldLocation(
+			this->Root->GetComponentLocation() + FVector(Movement.X, Movement.Y, 0.0f)
+		);
+	}
+
+	this->MoveCameraCommands.Empty();
 }
 
 void URTSCamera::CollectComponentDependencyReferences()
@@ -387,7 +402,7 @@ void URTSCamera::EdgeScrollLeft() const
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 
 	this->Root->AddRelativeLocation(
-		-1 * this->Root->GetRightVector() * Movement * this->EdgeScrollSpeed
+		-1 * this->Root->GetRightVector() * Movement * this->EdgeScrollSpeed * this->DeltaSeconds
 	);
 }
 
@@ -403,7 +418,7 @@ void URTSCamera::EdgeScrollRight() const
 
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 	this->Root->AddRelativeLocation(
-		this->Root->GetRightVector() * Movement * this->EdgeScrollSpeed
+		this->Root->GetRightVector() * Movement * this->EdgeScrollSpeed * this->DeltaSeconds
 	);
 }
 
@@ -419,7 +434,7 @@ void URTSCamera::EdgeScrollUp() const
 
 	const auto Movement = 1 - UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 	this->Root->AddRelativeLocation(
-		this->Root->GetForwardVector() * Movement * this->EdgeScrollSpeed
+		this->Root->GetForwardVector() * Movement * this->EdgeScrollSpeed * this->DeltaSeconds
 	);
 }
 
@@ -435,7 +450,7 @@ void URTSCamera::EdgeScrollDown() const
 
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
 	this->Root->AddRelativeLocation(
-		-1 * this->Root->GetForwardVector() * Movement * this->EdgeScrollSpeed
+		-1 * this->Root->GetForwardVector() * Movement * this->EdgeScrollSpeed * this->DeltaSeconds
 	);
 }
 
