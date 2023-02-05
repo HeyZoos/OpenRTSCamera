@@ -6,7 +6,7 @@
 	"Description": "An Unreal Engine 5 open-source RTS/MOBA camera implementation that aims to be fully featured, customizable and dependable",
 	"DocsURL": "https://github.com/HeyZoos/OpenRTSCamera/wiki",
 	"EnabledByDefault": true,
-	"EngineVersion": "5.0.0",
+	"EngineVersion": "5.1.0",
 	"FileVersion": 3,
 	"FriendlyName": "OpenRTSCamera",
 	"Installed": false,
@@ -31,5 +31,5 @@
 	],
 	"SupportURL": "https://github.com/HeyZoos/OpenRTSCamera/issues",
 	"Version": 1,
-	"VersionName": "0.17.0"
+	"VersionName": "0.18.0"
 }
