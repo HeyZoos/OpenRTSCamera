@@ -62,7 +62,7 @@ void URTSCamera::BeginPlay()
 	Super::BeginPlay();
 
 	const auto NetMode = this->GetNetMode();
-	if (NetMode != NM_DedicatedServer && this->PlayerController->GetViewTarget() == this->Owner)
+	if (NetMode != NM_DedicatedServer)
 	{
 		this->CollectComponentDependencyReferences();
 		this->ConfigureSpringArm();
