@@ -60,14 +60,19 @@ URTSCamera::URTSCamera()
 void URTSCamera::BeginPlay()
 {
 	Super::BeginPlay();
-	this->CollectComponentDependencyReferences();
-	this->ConfigureSpringArm();
-	this->TryToFindBoundaryVolumeReference();
-	this->ConditionallyEnableEdgeScrolling();
-	this->CheckForEnhancedInputComponent();
-	this->BindInputMappingContext();
-	this->BindInputActions();
-	this->SetActiveCamera();
+
+	const auto NetMode = this->GetNetMode();
+	if (NetMode != NM_DedicatedServer)
+	{
+		this->CollectComponentDependencyReferences();
+		this->ConfigureSpringArm();
+		this->TryToFindBoundaryVolumeReference();
+		this->ConditionallyEnableEdgeScrolling();
+		this->CheckForEnhancedInputComponent();
+		this->BindInputMappingContext();
+		this->BindInputActions();
+		this->SetActiveCamera();
+	}
 }
 
 void URTSCamera::TickComponent(
@@ -77,13 +82,17 @@ void URTSCamera::TickComponent(
 )
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	this->DeltaSeconds = DeltaTime;
-	this->ApplyMoveCameraCommands();
-	this->ConditionallyPerformEdgeScrolling();
-	this->ConditionallyKeepCameraAtDesiredZoomAboveGround();
-	this->SmoothTargetArmLengthToDesiredZoom();
-	this->FollowTargetIfSet();
-	this->ConditionallyApplyCameraBounds();
+	const auto NetMode = this->GetNetMode();
+	if (NetMode != NM_DedicatedServer)
+	{
+		this->DeltaSeconds = DeltaTime;
+		this->ApplyMoveCameraCommands();
+		this->ConditionallyPerformEdgeScrolling();
+		this->ConditionallyKeepCameraAtDesiredZoomAboveGround();
+		this->SmoothTargetArmLengthToDesiredZoom();
+		this->FollowTargetIfSet();
+		this->ConditionallyApplyCameraBounds();
+	}
 }
 
 void URTSCamera::FollowTarget(AActor* Target)
@@ -172,23 +181,23 @@ void URTSCamera::OnDragCamera(const FInputActionValue& Value)
 		this->IsDragging = true;
 		this->DragStartLocation = UWidgetLayoutLibrary::GetMousePositionOnViewport(this->GetWorld());
 	}
-	
+
 	else if (this->IsDragging && Value.Get<bool>())
 	{
 		const auto MousePosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(this->GetWorld());
 		auto DragExtents = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this->GetWorld()).GetLocalSize();
 		DragExtents *= DragExtent;
-		
+
 		auto Delta = MousePosition - this->DragStartLocation;
 		Delta.X = FMath::Clamp(Delta.X, -DragExtents.X, DragExtents.X) / DragExtents.X;
 		Delta.Y = FMath::Clamp(Delta.Y, -DragExtents.Y, DragExtents.Y) / DragExtents.Y;
-		
+
 		this->RequestMoveCamera(
 			this->SpringArm->GetRightVector().X,
 			this->SpringArm->GetRightVector().Y,
 			Delta.X
 		);
-		
+
 		this->RequestMoveCamera(
 			this->SpringArm->GetForwardVector().X,
 			this->SpringArm->GetForwardVector().Y,
@@ -363,7 +372,7 @@ void URTSCamera::BindInputActions()
 			this,
 			&URTSCamera::OnMoveCameraYAxis
 		);
-		
+
 		EnhancedInputComponent->BindAction(
 			this->DragCamera,
 			ETriggerEvent::Triggered,
@@ -506,7 +515,7 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 		else if (!this->IsCameraOutOfBoundsErrorAlreadyDisplayed)
 		{
 			this->IsCameraOutOfBoundsErrorAlreadyDisplayed = true;
-			
+
 			UKismetSystemLibrary::PrintString(
 				this->GetWorld(),
 				"Or add a `RTSCameraBoundsVolume` actor to the scene.",
@@ -515,7 +524,7 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 				FLinearColor::Red,
 				100
 			);
-			
+
 			UKismetSystemLibrary::PrintString(
 				this->GetWorld(),
 				"Increase trace length or change the starting position of the parent actor for the spring arm.",
@@ -524,7 +533,7 @@ void URTSCamera::ConditionallyKeepCameraAtDesiredZoomAboveGround()
 				FLinearColor::Red,
 				100
 			);
-			
+
 			UKismetSystemLibrary::PrintString(
 				this->GetWorld(),
 				"Error: AC_RTSCamera needs to be placed on the ground!",
