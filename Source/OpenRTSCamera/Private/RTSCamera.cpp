@@ -62,7 +62,7 @@ void URTSCamera::BeginPlay()
 	Super::BeginPlay();
 
 	const auto NetMode = this->GetNetMode();
-	if (NetMode != NM_DedicatedServer)
+	if (NetMode != NM_DedicatedServer && this->PlayerController->GetViewTarget() == this->Owner)
 	{
 		this->CollectComponentDependencyReferences();
 		this->ConfigureSpringArm();
@@ -71,7 +71,6 @@ void URTSCamera::BeginPlay()
 		this->CheckForEnhancedInputComponent();
 		this->BindInputMappingContext();
 		this->BindInputActions();
-		this->SetActiveCamera();
 	}
 }
 
@@ -83,7 +82,7 @@ void URTSCamera::TickComponent(
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	const auto NetMode = this->GetNetMode();
-	if (NetMode != NM_DedicatedServer)
+	if (NetMode != NM_DedicatedServer && this->PlayerController->GetViewTarget() == this->Owner)
 	{
 		this->DeltaSeconds = DeltaTime;
 		this->ApplyMoveCameraCommands();
@@ -384,7 +383,7 @@ void URTSCamera::BindInputActions()
 
 void URTSCamera::SetActiveCamera() const
 {
-	UGameplayStatics::GetPlayerController(this->GetWorld(), 0)->SetViewTarget(this->GetOwner());
+	this->PlayerController->SetViewTarget(this->GetOwner());
 }
 
 void URTSCamera::ConditionallyPerformEdgeScrolling() const

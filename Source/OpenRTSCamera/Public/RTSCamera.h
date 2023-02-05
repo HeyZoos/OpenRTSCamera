@@ -45,6 +45,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RTSCamera")
 	void UnFollowTarget();
 
+	UFUNCTION(BlueprintCallable, Category = "RTSCamera")
+	void SetActiveCamera() const;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Zoom Settings")
 	float MinimumZoomLength;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Zoom Settings")
@@ -167,7 +170,6 @@ private:
 	void CheckForEnhancedInputComponent() const;
 	void BindInputMappingContext() const;
 	void BindInputActions();
-	void SetActiveCamera() const;
 
 	void ConditionallyPerformEdgeScrolling() const;
 	void EdgeScrollLeft() const;
