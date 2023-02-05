@@ -15,6 +15,11 @@
 
 # Changelog
 
+### 0.18.0
+
+- Fix crash when using the camera in a networked context
+- **No longer take over view target automatically, the view target must be explicitly set, this is documented in the "Getting Started" section of the wiki**
+
 ### 0.17.0
 
 - Fix [#27](https://github.com/HeyZoos/OpenRTSCamera/issues/27) by tying camera movement to delta time (thanks [@theMyll](https://github.com/theMyll))
