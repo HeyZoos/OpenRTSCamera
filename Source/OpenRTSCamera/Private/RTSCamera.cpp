@@ -386,6 +386,11 @@ void URTSCamera::SetActiveCamera() const
 	this->PlayerController->SetViewTarget(this->GetOwner());
 }
 
+void URTSCamera::JumpTo(const FVector Position) const
+{
+	this->Root->SetWorldLocation(Position);
+}
+
 void URTSCamera::ConditionallyPerformEdgeScrolling() const
 {
 	if (this->EnableEdgeScrolling && !this->IsDragging)
