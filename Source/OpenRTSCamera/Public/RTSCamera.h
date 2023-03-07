@@ -47,6 +47,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RTSCamera")
 	void SetActiveCamera() const;
+	
+	UFUNCTION(BlueprintCallable, Category = "RTSCamera")
+	void JumpTo(FVector Position) const;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Zoom Settings")
 	float MinimumZoomLength;
