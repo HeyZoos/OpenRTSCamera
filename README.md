@@ -22,6 +22,10 @@ https://user-images.githubusercontent.com/9408481/223585144-d7e9c1c2-2e36-4628-9
 
 # Changelog
 
+### 0.20.0
+
+- Build for Unreal Engine v5.3.X
+
 ### 0.19.0
 
 - Add "Jump To" method
