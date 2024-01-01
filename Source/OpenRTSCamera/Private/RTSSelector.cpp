@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "RTSSelectable.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -42,9 +43,22 @@ void URTSSelector::BeginPlay()
 
 void URTSSelector::HandleSelectedActors(const TArray<AActor*>& NewSelectedActors)
 {
-	this->SelectedActors = NewSelectedActors;
+	for (const auto Actor : NewSelectedActors)
+	{
+		if (URTSSelectable* SelectableComponent = Actor->FindComponentByClass<URTSSelectable>())
+		{
+			this->SelectedActors.Add(SelectableComponent);
+			SelectableComponent->OnSelected();
+		}
+	}
+
 	// Handle the selected actors as needed
 	UE_LOG(LogTemp, Log, TEXT("Number of Selected Actors: %d"), SelectedActors.Num());
+}
+
+void URTSSelector::ClearSelectedActors()
+{
+	this->SelectedActors.Empty();
 }
 
 // Called every frame

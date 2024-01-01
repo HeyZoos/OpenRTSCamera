@@ -6,6 +6,7 @@
 #include "InputAction.h"
 #include "InputMappingContext.h"
 #include "RTSHUD.h"
+#include "RTSSelectable.h"
 #include "Components/ActorComponent.h"
 #include "RTSSelector.generated.h"
 
@@ -31,8 +32,10 @@ public:
 	UInputAction* BeginSelection;
 	FOnActorsSelected OnActorsSelected;
 	UPROPERTY()
-	TArray<AActor*> SelectedActors;
+	TArray<URTSSelectable*> SelectedActors;
+	UFUNCTION()
 	void HandleSelectedActors(const TArray<AActor*>& NewSelectedActors);
+	void ClearSelectedActors();
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,

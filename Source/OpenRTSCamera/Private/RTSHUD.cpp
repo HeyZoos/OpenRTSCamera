@@ -35,6 +35,7 @@ void ARTSHUD::DrawHUD()
 	// Perform the selection if the flag is set
 	if (bPerformSelection)
 	{
+		this->ClearSelectionBox();
 		TArray<AActor*> SelectedActors;
 		GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
 		bPerformSelection = false; // Reset the flag
@@ -60,6 +61,14 @@ void ARTSHUD::UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& E
 void ARTSHUD::ClearSelectionBox()
 {
 	bIsSelecting = false;
+
+	if (const auto PC = GetOwningPlayerController())
+	{
+		if (const auto SelectorComponent = PC->FindComponentByClass<URTSSelector>())
+		{
+			SelectorComponent->ClearSelectedActors();
+		}
+	}
 }
 
 void ARTSHUD::PerformSelection()
