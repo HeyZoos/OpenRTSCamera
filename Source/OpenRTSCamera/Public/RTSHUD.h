@@ -10,17 +10,19 @@ UCLASS()
 class OPENRTSCAMERA_API ARTSHUD : public AHUD
 {
 	GENERATED_BODY()
+
 public:
 	// Function to be called to update the selection box
 	void UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& EndPoint);
 	void ClearSelectionBox();
+	void PerformSelection();
 
 protected:
 	virtual void DrawHUD() override;
 
 private:
 	bool bIsSelecting;
+	bool bPerformSelection;
 	FVector2D SelectionStart;
 	FVector2D SelectionEnd;
 };
-

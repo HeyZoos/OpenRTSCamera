@@ -3,6 +3,7 @@
 
 #include "RTSHUD.h"
 
+#include "RTSSelector.h"
 #include "Engine/Canvas.h"
 
 
@@ -30,6 +31,23 @@ void ARTSHUD::DrawHUD()
 			Canvas->K2_DrawLine(BottomLeft, SelectionStart, LineThickness, LineColor);
 		}
 	}
+
+	// Perform the selection if the flag is set
+	if (bPerformSelection)
+	{
+		TArray<AActor*> SelectedActors;
+		GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
+		bPerformSelection = false; // Reset the flag
+
+		// Find the URTSSelector component and pass the selected actors to it
+		if (const auto PC = GetOwningPlayerController())
+		{
+			if (const auto SelectorComponent = PC->FindComponentByClass<URTSSelector>())
+			{
+				SelectorComponent->HandleSelectedActors(SelectedActors);
+			}
+		}
+	}
 }
 
 void ARTSHUD::UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& EndPoint)
@@ -42,4 +60,13 @@ void ARTSHUD::UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& E
 void ARTSHUD::ClearSelectionBox()
 {
 	bIsSelecting = false;
+}
+
+void ARTSHUD::PerformSelection()
+{
+	if (bIsSelecting)
+	{
+		bIsSelecting = false; // Reset the flag
+		bPerformSelection = true;
+	}
 }

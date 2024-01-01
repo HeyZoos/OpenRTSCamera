@@ -36,9 +36,16 @@ void URTSSelector::BeginPlay()
 		this->CollectComponentDependencyReferences();
 		this->BindInputMappingContext();
 		this->BindInputActions();
+		OnActorsSelected.AddDynamic(this, &URTSSelector::HandleSelectedActors);
 	}
 }
 
+void URTSSelector::HandleSelectedActors(const TArray<AActor*>& NewSelectedActors)
+{
+	this->SelectedActors = NewSelectedActors;
+	// Handle the selected actors as needed
+	UE_LOG(LogTemp, Log, TEXT("Number of Selected Actors: %d"), SelectedActors.Num());
+}
 
 // Called every frame
 void URTSSelector::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -144,29 +151,12 @@ void URTSSelector::OnUpdateSelection(const FInputActionValue& Value)
 
 void URTSSelector::OnSelectionEnd(const FInputActionValue& Value)
 {
-	bIsSelecting = false;
-
-	// Get the ending point of the selection box and perform selection
 	if (PlayerController)
 	{
-		// SelectUnitsInBox(); // Function to select units within the box
-		HUD->ClearSelectionBox();
-	}
-}
-
-
-void URTSSelector::SelectUnitsInBox()
-{
-	if (HUD)
-	{
-		TArray<AActor*> SelectedActors;
-		// HUD->GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
-		// Log the count of selected actors
-		const int32 NumSelectedActors = SelectedActors.Num();
-		UE_LOG(LogTemp, Log, TEXT("Number of Selected Actors: %d"), NumSelectedActors);
-
-		// Log the start and end points of the selection
-		UE_LOG(LogTemp, Log, TEXT("Selection Start: (X: %f, Y: %f), Selection End: (X: %f, Y: %f)"),
-		       SelectionStart.X, SelectionStart.Y, SelectionEnd.X, SelectionEnd.Y);
+		if (ARTSHUD* RTS_HUD = Cast<ARTSHUD>(HUD))
+		{
+			// Call PerformSelection on the HUD to execute selection logic
+			RTS_HUD->PerformSelection();
+		}
 	}
 }

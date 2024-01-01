@@ -10,14 +10,15 @@
 #include "RTSSelector.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERA_API URTSSelector : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	URTSSelector();
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorsSelected, const TArray<AActor*>&, SelectedActors);
 
 protected:
 	// Called when the game starts
@@ -28,9 +29,14 @@ public:
 	UInputMappingContext* InputMappingContext;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Inputs")
 	UInputAction* BeginSelection;
-	
+	FOnActorsSelected OnActorsSelected;
+	UPROPERTY()
+	TArray<AActor*> SelectedActors;
+	void HandleSelectedActors(const TArray<AActor*>& NewSelectedActors);
+
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 	void BindInputActions();
 	void BindInputMappingContext();
@@ -40,15 +46,9 @@ public:
 	void OnUpdateSelection(const FInputActionValue& Value);
 	void OnSelectionEnd(const FInputActionValue& Value);
 
-	// Unit selection
-	void SelectUnitsInBox();
-
-	// Selection box drawing
-	void DrawSelectionBox();
-
 private:
 	void CollectComponentDependencyReferences();
-	
+
 	FVector2D SelectionStart;
 	FVector2D SelectionEnd;
 	bool bIsSelecting;
