@@ -1,4 +1,4 @@
-// Copyright 2022 Jesus Bracho All Rights Reserved.
+// Copyright 2024 Jesus Bracho All Rights Reserved.
 
 #include "RTSCamera.h"
 
@@ -317,13 +317,20 @@ void URTSCamera::CheckForEnhancedInputComponent() const
 
 void URTSCamera::BindInputMappingContext() const
 {
-	this->PlayerController->bShowMouseCursor = true;
-	const auto Subsystem = this
-	                       ->PlayerController
-	                       ->GetLocalPlayer()
-	                       ->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
-	Subsystem->ClearAllMappings();
-	Subsystem->AddMappingContext(this->InputMappingContext, 0);
+	if (PlayerController && PlayerController->GetLocalPlayer())
+	{
+		if (const auto Input = PlayerController->GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			PlayerController->bShowMouseCursor = true;
+
+			// Check if the context is already bound to prevent double binding
+			if (!Input->HasMappingContext(this->InputMappingContext))
+			{
+				Input->ClearAllMappings();
+				Input->AddMappingContext(this->InputMappingContext, 0);
+			}
+		}
+	}
 }
 
 void URTSCamera::BindInputActions()
