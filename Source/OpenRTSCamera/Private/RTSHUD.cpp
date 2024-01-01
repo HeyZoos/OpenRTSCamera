@@ -38,3 +38,8 @@ void ARTSHUD::UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& E
 	SelectionEnd = EndPoint;
 	bIsSelecting = true;
 }
+
+void ARTSHUD::ClearSelectionBox()
+{
+	bIsSelecting = false;
+}

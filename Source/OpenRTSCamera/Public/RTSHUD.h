@@ -13,6 +13,7 @@ class OPENRTSCAMERA_API ARTSHUD : public AHUD
 public:
 	// Function to be called to update the selection box
 	void UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& EndPoint);
+	void ClearSelectionBox();
 
 protected:
 	virtual void DrawHUD() override;

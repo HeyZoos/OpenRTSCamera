@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
+#include "RTSHUD.h"
 #include "Components/ActorComponent.h"
 #include "RTSSelector.generated.h"
 
@@ -36,6 +37,7 @@ public:
 
 	// Input functions
 	void OnSelectionStart(const FInputActionValue& Value);
+	void OnUpdateSelection(const FInputActionValue& Value);
 	void OnSelectionEnd(const FInputActionValue& Value);
 
 	// Unit selection
@@ -53,5 +55,5 @@ private:
 	UPROPERTY()
 	APlayerController* PlayerController;
 	UPROPERTY()
-	AHUD* HUD;
+	ARTSHUD* HUD;
 };

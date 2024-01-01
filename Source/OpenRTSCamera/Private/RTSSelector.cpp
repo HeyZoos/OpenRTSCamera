@@ -5,7 +5,6 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameFramework/HUD.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -52,7 +51,7 @@ void URTSSelector::CollectComponentDependencyReferences()
 	if (const auto PlayerControllerRef = UGameplayStatics::GetPlayerController(this->GetWorld(), 0))
 	{
 		this->PlayerController = PlayerControllerRef;
-		this->HUD = PlayerControllerRef->GetHUD();
+		this->HUD = Cast<ARTSHUD>(PlayerControllerRef->GetHUD());
 	}
 	else
 	{
@@ -78,6 +77,13 @@ void URTSSelector::BindInputActions()
 			ETriggerEvent::Started,
 			this,
 			&URTSSelector::OnSelectionStart
+		);
+
+		EnhancedInputComponent->BindAction(
+			this->BeginSelection,
+			ETriggerEvent::Triggered,
+			this,
+			&URTSSelector::OnUpdateSelection
 		);
 
 		EnhancedInputComponent->BindAction(
@@ -122,6 +128,20 @@ void URTSSelector::OnSelectionStart(const FInputActionValue& Value)
 	}
 }
 
+void URTSSelector::OnUpdateSelection(const FInputActionValue& Value)
+{
+	bIsSelecting = true;
+
+	// Get the starting point of the selection box
+	if (PlayerController)
+	{
+		FVector2D MousePosition;
+		PlayerController->GetMousePosition(MousePosition.X, MousePosition.Y);
+		SelectionEnd = MousePosition;
+		HUD->UpdateSelectionBox(SelectionStart, SelectionEnd);
+	}
+}
+
 void URTSSelector::OnSelectionEnd(const FInputActionValue& Value)
 {
 	bIsSelecting = false;
@@ -129,13 +149,8 @@ void URTSSelector::OnSelectionEnd(const FInputActionValue& Value)
 	// Get the ending point of the selection box and perform selection
 	if (PlayerController)
 	{
-		FVector2D MousePosition;
-		PlayerController->GetMousePosition(MousePosition.X, MousePosition.Y);
-		SelectionEnd = MousePosition;
-		UE_LOG(LogTemp, Log, TEXT("OnSelectionEnd - Mouse Position: (X: %f, Y: %f)"),
-		       MousePosition.X, MousePosition.Y);
-
-		SelectUnitsInBox(); // Function to select units within the box
+		// SelectUnitsInBox(); // Function to select units within the box
+		HUD->ClearSelectionBox();
 	}
 }
 
@@ -145,7 +160,7 @@ void URTSSelector::SelectUnitsInBox()
 	if (HUD)
 	{
 		TArray<AActor*> SelectedActors;
-		HUD->GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
+		// HUD->GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
 		// Log the count of selected actors
 		const int32 NumSelectedActors = SelectedActors.Num();
 		UE_LOG(LogTemp, Log, TEXT("Number of Selected Actors: %d"), NumSelectedActors);
