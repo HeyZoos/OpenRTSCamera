@@ -1,6 +1,5 @@
 // Copyright 2024 Jesus Bracho All Rights Reserved.
 
-
 #include "RTSSelector.h"
 
 #include "EnhancedInputComponent.h"
@@ -42,7 +41,29 @@ void URTSSelector::BeginPlay()
 
 void URTSSelector::HandleSelectedActors(const TArray<AActor*>& NewSelectedActors)
 {
-	for (const auto Actor : NewSelectedActors)
+	// Convert NewSelectedActors to a set for efficient lookup
+	TSet<AActor*> NewSelectedActorSet;
+	for (const auto& Actor : NewSelectedActors)
+	{
+		NewSelectedActorSet.Add(Actor);
+	}
+
+	// Iterate over currently selected actors
+	for (const auto& Selected : SelectedActors)
+	{
+		// Check if the actor is not in the new selection
+		if (!NewSelectedActorSet.Contains(Selected->GetOwner()))
+		{
+			// Call OnDeselected for actors that are no longer selected
+			Selected->OnDeselected();
+		}
+	}
+
+	// Clear the current selection
+	ClearSelectedActors();
+    
+	// Add new selected actors and call OnSelected
+	for (const auto& Actor : NewSelectedActors)
 	{
 		if (URTSSelectable* SelectableComponent = Actor->FindComponentByClass<URTSSelectable>())
 		{
@@ -50,9 +71,6 @@ void URTSSelector::HandleSelectedActors(const TArray<AActor*>& NewSelectedActors
 			SelectableComponent->OnSelected();
 		}
 	}
-
-	// Handle the selected actors as needed
-	UE_LOG(LogTemp, Log, TEXT("Number of Selected Actors: %d"), SelectedActors.Num());
 }
 
 void URTSSelector::ClearSelectedActors()

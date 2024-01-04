@@ -81,4 +81,6 @@ void ARTSHUD::PerformSelection_Implementation()
 			SelectorComponent->HandleSelectedActors(SelectedActors);
 		}
 	}
+
+	bIsPerformingSelection = false;
 }
