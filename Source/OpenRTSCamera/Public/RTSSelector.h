@@ -48,15 +48,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RTSCamera - Selection")
 	void OnSelectionEnd(const FInputActionValue& Value);
 
+	UPROPERTY(BlueprintReadOnly, Category = "RTSCamera - Selection")
+	TArray<URTSSelectable*> SelectedActors;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY()
-	TArray<URTSSelectable*> SelectedActors;
-
 	UPROPERTY()
 	APlayerController* PlayerController;
 
