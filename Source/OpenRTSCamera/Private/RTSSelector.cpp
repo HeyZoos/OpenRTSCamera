@@ -26,7 +26,6 @@ URTSSelector::URTSSelector(): bIsSelecting(false), PlayerController(nullptr), HU
 
 
 // Called when the game starts
-
 void URTSSelector::BeginPlay()
 {
 	Super::BeginPlay();
@@ -136,41 +135,21 @@ void URTSSelector::BindInputMappingContext()
 
 void URTSSelector::OnSelectionStart(const FInputActionValue& Value)
 {
-	bIsSelecting = true;
-
-	// Get the starting point of the selection box
-	if (PlayerController)
-	{
-		FVector2D MousePosition;
-		PlayerController->GetMousePosition(MousePosition.X, MousePosition.Y);
-		SelectionStart = MousePosition;
-		UE_LOG(LogTemp, Log, TEXT("OnSelectionStart - Mouse Position: (X: %f, Y: %f)"),
-		       MousePosition.X, MousePosition.Y);
-	}
+	FVector2D MousePosition;
+	PlayerController->GetMousePosition(MousePosition.X, MousePosition.Y);
+	HUD->BeginSelection(MousePosition);
 }
 
 void URTSSelector::OnUpdateSelection(const FInputActionValue& Value)
 {
-	bIsSelecting = true;
-
-	// Get the starting point of the selection box
-	if (PlayerController)
-	{
-		FVector2D MousePosition;
-		PlayerController->GetMousePosition(MousePosition.X, MousePosition.Y);
-		SelectionEnd = MousePosition;
-		HUD->UpdateSelectionBox(SelectionStart, SelectionEnd);
-	}
+	FVector2D MousePosition;
+	PlayerController->GetMousePosition(MousePosition.X, MousePosition.Y);
+	SelectionEnd = MousePosition;
+	HUD->UpdateSelection(SelectionEnd);
 }
 
 void URTSSelector::OnSelectionEnd(const FInputActionValue& Value)
 {
-	if (PlayerController)
-	{
-		if (ARTSHUD* RTS_HUD = Cast<ARTSHUD>(HUD))
-		{
-			// Call PerformSelection on the HUD to execute selection logic
-			RTS_HUD->PerformSelection();
-		}
-	}
+	// Call PerformSelection on the HUD to execute selection logic
+	HUD->EndSelection();
 }

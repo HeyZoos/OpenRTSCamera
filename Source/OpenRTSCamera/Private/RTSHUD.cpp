@@ -1,81 +1,84 @@
-// Copyright 2024 Jesus Bracho All Rights Reserved.
-
-
 #include "RTSHUD.h"
-
 #include "RTSSelector.h"
 #include "Engine/Canvas.h"
 
+// Constructor implementation: Initializes default values.
+ARTSHUD::ARTSHUD()
+{
+	SelectionBoxColor = FLinearColor::Green;
+	SelectionBoxThickness = 1.0f;
+	bIsDrawingSelectionBox = false;
+	bIsPerformingSelection = false;
+}
 
+// Implementation of the DrawHUD function. It's called every frame to draw the HUD.
 void ARTSHUD::DrawHUD()
 {
-	Super::DrawHUD();
+	Super::DrawHUD(); // Call the base class implementation.
 
-	if (bIsSelecting)
+	// Draw the selection box if it's active.
+	if (bIsDrawingSelectionBox)
 	{
-		// Ensure the Canvas is valid
-		if (Canvas)
-		{
-			// Set the color and thickness of the lines
-			FLinearColor LineColor = FLinearColor::Green; // You can change the color
-			float LineThickness = 1.0f; // You can change the thickness
-
-			// Calculate the corners of the rectangle
-			FVector2D TopRight = FVector2D(SelectionEnd.X, SelectionStart.Y);
-			FVector2D BottomLeft = FVector2D(SelectionStart.X, SelectionEnd.Y);
-
-			// Draw the four sides of the rectangle
-			Canvas->K2_DrawLine(SelectionStart, TopRight, LineThickness, LineColor);
-			Canvas->K2_DrawLine(TopRight, SelectionEnd, LineThickness, LineColor);
-			Canvas->K2_DrawLine(SelectionEnd, BottomLeft, LineThickness, LineColor);
-			Canvas->K2_DrawLine(BottomLeft, SelectionStart, LineThickness, LineColor);
-		}
+		DrawSelectionBox(SelectionStart, SelectionEnd);
 	}
 
-	// Perform the selection if the flag is set
-	if (bPerformSelection)
+	// Perform selection actions if required.
+	if (bIsPerformingSelection)
 	{
-		this->ClearSelectionBox();
-		TArray<AActor*> SelectedActors;
-		GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
-		bPerformSelection = false; // Reset the flag
-
-		// Find the URTSSelector component and pass the selected actors to it
-		if (const auto PC = GetOwningPlayerController())
-		{
-			if (const auto SelectorComponent = PC->FindComponentByClass<URTSSelector>())
-			{
-				SelectorComponent->HandleSelectedActors(SelectedActors);
-			}
-		}
+		PerformSelection();
 	}
 }
 
-void ARTSHUD::UpdateSelectionBox(const FVector2D& StartPoint, const FVector2D& EndPoint)
+// Starts the selection process, setting the initial point and activating the selection flag.
+void ARTSHUD::BeginSelection(const FVector2D& StartPoint)
 {
 	SelectionStart = StartPoint;
-	SelectionEnd = EndPoint;
-	bIsSelecting = true;
+	bIsDrawingSelectionBox = true;
 }
 
-void ARTSHUD::ClearSelectionBox()
+// Updates the current endpoint of the selection box.
+void ARTSHUD::UpdateSelection(const FVector2D& EndPoint)
 {
-	bIsSelecting = false;
+	SelectionEnd = EndPoint;
+}
 
+// Ends the selection process and triggers the selection logic.
+void ARTSHUD::EndSelection()
+{
+	bIsDrawingSelectionBox = false;
+	bIsPerformingSelection = true;
+}
+
+// Default implementation of DrawSelectionBox. Draws a rectangle on the HUD.
+void ARTSHUD::DrawSelectionBox_Implementation(const FVector2D& StartPoint, const FVector2D& EndPoint)
+{
+	if (Canvas)
+	{
+		// Calculate corners of the selection rectangle.
+		const auto TopRight = FVector2D(SelectionEnd.X, SelectionStart.Y);
+		const auto BottomLeft = FVector2D(SelectionStart.X, SelectionEnd.Y);
+
+		// Draw lines to form the selection rectangle.
+		Canvas->K2_DrawLine(SelectionStart, TopRight, SelectionBoxThickness, SelectionBoxColor);
+		Canvas->K2_DrawLine(TopRight, SelectionEnd, SelectionBoxThickness, SelectionBoxColor);
+		Canvas->K2_DrawLine(SelectionEnd, BottomLeft, SelectionBoxThickness, SelectionBoxColor);
+		Canvas->K2_DrawLine(BottomLeft, SelectionStart, SelectionBoxThickness, SelectionBoxColor);
+	}
+}
+
+// Default implementation of PerformSelection. Selects actors within the selection box.
+void ARTSHUD::PerformSelection_Implementation()
+{
+	// Array to store actors that are within the selection rectangle.
+	TArray<AActor*> SelectedActors;
+	GetActorsInSelectionRectangle<AActor>(SelectionStart, SelectionEnd, SelectedActors, false, false);
+
+	// Find the URTSSelector component and pass the selected actors to it.
 	if (const auto PC = GetOwningPlayerController())
 	{
 		if (const auto SelectorComponent = PC->FindComponentByClass<URTSSelector>())
 		{
-			SelectorComponent->ClearSelectedActors();
+			SelectorComponent->HandleSelectedActors(SelectedActors);
 		}
-	}
-}
-
-void ARTSHUD::PerformSelection()
-{
-	if (bIsSelecting)
-	{
-		bIsSelecting = false; // Reset the flag
-		bPerformSelection = true;
 	}
 }
