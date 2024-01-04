@@ -10,53 +10,65 @@
 #include "Components/ActorComponent.h"
 #include "RTSSelector.generated.h"
 
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERA_API URTSSelector : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	URTSSelector();
+
+	// BlueprintAssignable allows binding in Blueprints
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorsSelected, const TArray<AActor*>&, SelectedActors);
+	UPROPERTY(BlueprintAssignable)
+	FOnActorsSelected OnActorsSelected;
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:
+	// BlueprintReadWrite allows access and modification in Blueprints
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Inputs")
 	UInputMappingContext* InputMappingContext;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RTSCamera - Inputs")
 	UInputAction* BeginSelection;
-	FOnActorsSelected OnActorsSelected;
-	UPROPERTY()
-	TArray<URTSSelectable*> SelectedActors;
-	UFUNCTION()
-	void HandleSelectedActors(const TArray<AActor*>& NewSelectedActors);
+
+	// Function to clear selected actors, can be overridden in Blueprints
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RTSCamera - Selection")
 	void ClearSelectedActors();
 
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
-	void BindInputActions();
-	void BindInputMappingContext();
+	// Function to handle selected actors, can be overridden in Blueprints
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RTSCamera - Selection")
+	void HandleSelectedActors(const TArray<AActor*>& NewSelectedActors);
 
-	// Input functions
+	// BlueprintCallable to allow calling from Blueprints
+	UFUNCTION(BlueprintCallable, Category = "RTSCamera - Selection")
 	void OnSelectionStart(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable, Category = "RTSCamera - Selection")
 	void OnUpdateSelection(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable, Category = "RTSCamera - Selection")
 	void OnSelectionEnd(const FInputActionValue& Value);
 
+protected:
+	virtual void BeginPlay() override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 private:
-	void CollectComponentDependencyReferences();
+	UPROPERTY()
+	TArray<URTSSelectable*> SelectedActors;
+
+	UPROPERTY()
+	APlayerController* PlayerController;
+
+	UPROPERTY()
+	ARTSHUD* HUD;
 
 	FVector2D SelectionStart;
 	FVector2D SelectionEnd;
+
 	bool bIsSelecting;
-	UPROPERTY()
-	APlayerController* PlayerController;
-	UPROPERTY()
-	ARTSHUD* HUD;
+
+	void BindInputActions();
+	void BindInputMappingContext();
+	void CollectComponentDependencyReferences();
 };

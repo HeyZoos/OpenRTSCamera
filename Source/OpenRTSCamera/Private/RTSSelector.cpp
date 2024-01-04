@@ -39,7 +39,7 @@ void URTSSelector::BeginPlay()
 	}
 }
 
-void URTSSelector::HandleSelectedActors(const TArray<AActor*>& NewSelectedActors)
+void URTSSelector::HandleSelectedActors_Implementation(const TArray<AActor*>& NewSelectedActors)
 {
 	// Convert NewSelectedActors to a set for efficient lookup
 	TSet<AActor*> NewSelectedActorSet;
@@ -73,7 +73,7 @@ void URTSSelector::HandleSelectedActors(const TArray<AActor*>& NewSelectedActors
 	}
 }
 
-void URTSSelector::ClearSelectedActors()
+void URTSSelector::ClearSelectedActors_Implementation()
 {
 	this->SelectedActors.Empty();
 }
