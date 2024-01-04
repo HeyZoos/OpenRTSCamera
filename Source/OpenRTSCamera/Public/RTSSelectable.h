@@ -1,14 +1,14 @@
 ﻿#pragma once
 #include "RTSSelectable.generated.h"
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERA_API URTSSelectable : public UActorComponent
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OnSelected();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OnDeselected();
 };
