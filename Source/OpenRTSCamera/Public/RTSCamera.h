@@ -1,4 +1,4 @@
-// Copyright 2022 Jesus Bracho All Rights Reserved.
+// Copyright 2024 Jesus Bracho All Rights Reserved.
 
 #pragma once
 
@@ -18,11 +18,11 @@ struct FMoveCameraCommand
 {
 	GENERATED_BODY()
 	UPROPERTY()
-	float X;
+	float X = 0;
 	UPROPERTY()
-	float Y;
+	float Y = 0;
 	UPROPERTY()
-	float Scale;
+	float Scale = 0;
 };
 
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

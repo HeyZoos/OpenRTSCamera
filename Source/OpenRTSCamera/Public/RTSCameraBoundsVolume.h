@@ -1,4 +1,4 @@
-// Copyright 2022, Jesus Bracho, All Rights Reserved.
+// Copyright 2024 Jesus Bracho All Rights Reserved.
 
 #pragma once
 
