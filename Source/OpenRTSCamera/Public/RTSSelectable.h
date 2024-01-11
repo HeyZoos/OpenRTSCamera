@@ -6,9 +6,9 @@ class OPENRTSCAMERA_API URTSSelectable : public UActorComponent
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "RTS Selection")
 	void OnSelected();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "RTS Selection")
 	void OnDeselected();
 };
