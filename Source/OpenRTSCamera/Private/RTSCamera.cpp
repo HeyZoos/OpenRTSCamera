@@ -326,7 +326,6 @@ void URTSCamera::BindInputMappingContext() const
 			// Check if the context is already bound to prevent double binding
 			if (!Input->HasMappingContext(this->InputMappingContext))
 			{
-				Input->ClearAllMappings();
 				Input->AddMappingContext(this->InputMappingContext, 0);
 			}
 		}
