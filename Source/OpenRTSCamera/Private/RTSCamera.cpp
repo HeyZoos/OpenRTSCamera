@@ -416,7 +416,7 @@ void URTSCamera::EdgeScrollLeft() const
 	const auto NormalizedMousePosition = 1 - UKismetMathLibrary::NormalizeToRange(
 		MousePosition.X,
 		0.0f,
-		ViewportSize.X * 0.05f
+		ViewportSize.X * this->DistanceFromEdgeThreshold
 	);
 
 	const auto Movement = UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
@@ -432,7 +432,7 @@ void URTSCamera::EdgeScrollRight() const
 	const auto ViewportSize = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this->GetWorld()).GetLocalSize();
 	const auto NormalizedMousePosition = UKismetMathLibrary::NormalizeToRange(
 		MousePosition.X,
-		ViewportSize.X * 0.95f,
+		ViewportSize.X * (1 - this->DistanceFromEdgeThreshold),
 		ViewportSize.X
 	);
 
@@ -449,7 +449,7 @@ void URTSCamera::EdgeScrollUp() const
 	const auto NormalizedMousePosition = UKismetMathLibrary::NormalizeToRange(
 		MousePosition.Y,
 		0.0f,
-		ViewportSize.Y * 0.05f
+		ViewportSize.Y * this->DistanceFromEdgeThreshold
 	);
 
 	const auto Movement = 1 - UKismetMathLibrary::FClamp(NormalizedMousePosition, 0.0, 1.0);
@@ -464,7 +464,7 @@ void URTSCamera::EdgeScrollDown() const
 	const auto ViewportSize = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this->GetWorld()).GetLocalSize();
 	const auto NormalizedMousePosition = UKismetMathLibrary::NormalizeToRange(
 		MousePosition.Y,
-		ViewportSize.Y * 0.95f,
+		ViewportSize.Y * (1 - this->DistanceFromEdgeThreshold),
 		ViewportSize.Y
 	);
 
