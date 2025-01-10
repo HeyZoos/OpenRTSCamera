@@ -10,7 +10,7 @@
 #include "Components/ActorComponent.h"
 #include "RTSSelector.generated.h"
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERA_API URTSSelector : public UActorComponent
 {
 	GENERATED_BODY()
