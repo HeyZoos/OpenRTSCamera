@@ -10,7 +10,7 @@
 #include "Components/ActorComponent.h"
 #include "RTSSelector.generated.h"
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class OPENRTSCAMERA_API URTSSelector : public UActorComponent
 {
 	GENERATED_BODY()
@@ -37,6 +37,10 @@ public:
 	// Function to handle selected actors, can be overridden in Blueprints
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RTSCamera - Selection")
 	void HandleSelectedActors(const TArray<AActor*>& NewSelectedActors);
+	
+	// Function to filter selectable actors, can be overriden in Blueprints
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "RTSCamera - Selection")
+	bool CanSelectActor(AActor* Actor) const;
 
 	// BlueprintCallable to allow calling from Blueprints
 	UFUNCTION(BlueprintCallable, Category = "RTSCamera - Selection")
