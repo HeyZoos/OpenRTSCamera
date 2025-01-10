@@ -42,17 +42,20 @@ void URTSSelector::BeginPlay()
 void URTSSelector::HandleSelectedActors_Implementation(const TArray<AActor*>& NewSelectedActors)
 {
 	// Convert NewSelectedActors to a set for efficient lookup
-	TSet<AActor*> NewSelectedActorSet;
+	TSet<AActor*> FilteredSelectedActors;
 	for (const auto& Actor : NewSelectedActors)
 	{
-		NewSelectedActorSet.Add(Actor);
+		if (Actor && this->CanSelectActor(Actor))
+		{
+			FilteredSelectedActors.Add(Actor);
+		}
 	}
 
 	// Iterate over currently selected actors
-	for (const auto& Selected : SelectedActors)
+	for (const auto& Selected : this->SelectedActors)
 	{
 		// Check if the actor is not in the new selection
-		if (!NewSelectedActorSet.Contains(Selected->GetOwner()))
+		if (!FilteredSelectedActors.Contains(Selected->GetOwner()))
 		{
 			// Call OnDeselected for actors that are no longer selected
 			Selected->OnDeselected();
@@ -170,4 +173,8 @@ void URTSSelector::OnSelectionEnd(const FInputActionValue& Value)
 {
 	// Call PerformSelection on the HUD to execute selection logic
 	HUD->EndSelection();
+}
+
+bool URTSSelector::CanSelectActor_Implementation(AActor *Actor) const {
+	return true;	
 }
