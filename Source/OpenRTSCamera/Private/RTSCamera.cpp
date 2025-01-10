@@ -45,6 +45,8 @@ URTSCamera::URTSCamera()
 		TurnCameraRightFinder(TEXT("/OpenRTSCamera/Inputs/TurnCameraRight"));
 	static ConstructorHelpers::FObjectFinder<UInputAction>
 		ZoomCameraFinder(TEXT("/OpenRTSCamera/Inputs/ZoomCamera"));
+	static ConstructorHelpers::FObjectFinder<UInputAction>
+		DragCameraFinder(TEXT("/OpenRTSCamera/Inputs/DragCamera"));
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext>
 		InputMappingContextFinder(TEXT("/OpenRTSCamera/Inputs/OpenRTSCameraInputs"));
 
@@ -53,6 +55,7 @@ URTSCamera::URTSCamera()
 	this->RotateCameraAxis = RotateCameraAxisFinder.Object;
 	this->TurnCameraLeft = TurnCameraLeftFinder.Object;
 	this->TurnCameraRight = TurnCameraRightFinder.Object;
+	this->DragCamera = DragCameraFinder.Object;
 	this->ZoomCamera = ZoomCameraFinder.Object;
 	this->InputMappingContext = InputMappingContextFinder.Object;
 }
